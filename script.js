@@ -37,7 +37,7 @@ const blocks = [
 
 function addBlocks(){
     for(let i = 0; i < blocks.length; i++){
-        const block = document.createElement('div');
+        let block = document.createElement('div');
         block.classList.add('block');
         block.style.left = blocks[i].bottomLeft[0]+'px';
         block.style.bottom = blocks[i].bottomLeft[1]+'px';
@@ -65,20 +65,46 @@ drawUser();
 grid.appendChild(user);
 
 
+function moveLeft(){
+    if(currentPosition[0] > 0){
+        currentPosition[0]-=10;
+    }
+    drawUser();
+}
+
+function moveRight(){
+    if(currentPosition[0] < boardWidth - BLOCK_WIDTH){
+        currentPosition[0]+=10;
+    }    
+    drawUser();
+}
 //move user
+
+let leftInterval;
+let rightInterval;
+
+let leftMoveFlag = 1;
+let rightMoveFlag = 1;
+
 function moveUser(e){
     switch(e.key){
         case 'ArrowLeft':
-            if(currentPosition[0] > 0){
-                currentPosition[0]-=10;
-                drawUser();
-            }
+                clearInterval(rightInterval);
+                clearInterval(leftInterval);
+                if(leftMoveFlag === 1){
+                    leftInterval = setInterval(moveLeft,40);
+                    rightMoveFlag=1;
+                }
+                leftMoveFlag*=-1;
             break;
         case 'ArrowRight':
-            if(currentPosition[0] < boardWidth - BLOCK_WIDTH){
-                currentPosition[0]+=10;
-                drawUser();
-            }
+                clearInterval(rightInterval);
+                clearInterval(leftInterval);
+                if(rightMoveFlag === 1){
+                    rightInterval = setInterval(moveRight,40);
+                    leftMoveFlag=1;
+                }
+                rightMoveFlag*=-1;
             break;
     }
 }
