@@ -67,14 +67,14 @@ grid.appendChild(user);
 
 function moveLeft(){
     if(currentPosition[0] > 0){
-        currentPosition[0]-=10;
+        currentPosition[0]-=5;
     }
     drawUser();
 }
 
 function moveRight(){
     if(currentPosition[0] < boardWidth - BLOCK_WIDTH){
-        currentPosition[0]+=10;
+        currentPosition[0]+=5;
     }    
     drawUser();
 }
@@ -83,33 +83,27 @@ function moveRight(){
 let leftInterval;
 let rightInterval;
 
-let leftMoveFlag = 1;
-let rightMoveFlag = 1;
+let userDirection = 0;
 
-function moveUser(e){
+function onKeyDown(e){
     switch(e.key){
         case 'ArrowLeft':
-                clearInterval(rightInterval);
-                clearInterval(leftInterval);
-                if(leftMoveFlag === 1){
-                    leftInterval = setInterval(moveLeft,40);
-                    rightMoveFlag=1;
-                }
-                leftMoveFlag*=-1;
+            userDirection = -1;
             break;
         case 'ArrowRight':
-                clearInterval(rightInterval);
-                clearInterval(leftInterval);
-                if(rightMoveFlag === 1){
-                    rightInterval = setInterval(moveRight,40);
-                    leftMoveFlag=1;
-                }
-                rightMoveFlag*=-1;
+            userDirection = 1;
             break;
     }
 }
 
-document.addEventListener("keydown", moveUser);
+document.addEventListener("keydown", onKeyDown);
+
+function onKeyUp(e){
+	userDirection = 0;
+}
+
+document.addEventListener("keyup", onKeyUp);
+
 
 //draw ball
 function drawBall(){
@@ -133,6 +127,10 @@ grid.appendChild(ball);
 function moveBall(){
     ballCurrentPosition[0] += xDirection;
     ballCurrentPosition[1] += yDirection;
+    if (userDirection > 0)
+		moveRight();
+	else if (userDirection < 0)
+		moveLeft();
     drawBall();
     checkForCollisions();
 }
