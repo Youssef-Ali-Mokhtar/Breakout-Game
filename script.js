@@ -203,7 +203,7 @@ function checkForCollisions(){
     }else if(ballCurrentPosition[1] <= 0){ //ball hits the floor
         clearInterval(timerId);
         lost();
-        document.removeEventListener('keydown', moveUser);
+        document.removeEventListener('keydown', onKeyDown);
     }else if(ballCurrentPosition[0] <= 0){ //ball hits the left wall
         changeHorizontalDirection();
     }
